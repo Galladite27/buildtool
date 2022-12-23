@@ -1,7 +1,12 @@
 #!/bin/sh
 
-cleanfiles=
-reallycleanfiles=
+# cleanfiles should be removed during a normal build and a level 1 debug build (i.e. will only be useful to deep debugging, e.g. *.o files)
+# don't add spaces or other funky stuff
+cleanfiles=("src/main.o")
+
+# reallycleanfiles should be removed during a normal build only (i.e. will be useful to all debugging, e.g. makefiles)
+# don't add spaces or other funky stuff
+reallycleanfiles=("src/Makefile", "src/.deps")
 
 prompt () {
     if [ $? == 0 ]; then
@@ -23,16 +28,20 @@ prompt () {
 cleanup () {
     if [ "$2" == "debug1" ]; then
         rm -r aclocal.m4 autom4te.cache config.h.in config.status Makefile.in stamp-h1 src/Makefile.in
+        for i in "${reallycleanfiles[@]}"; do
+            rm -r $(echo $i | sed 's/,//g')
+        done
     elif [ "$2" == "debug2" ]; then
         :
     else
         rm -r aclocal.m4 autom4te.cache build-aux config.h config.h.in config.log config.status configure Makefile Makefile.in stamp-h1 src/Makefile.in
+        for i in "${cleanfiles[@]}"; do
+            rm -r $(echo $i | sed 's/,//g')
+        done
+        for i in "${reallycleanfiles[@]}"; do
+            rm -r $(echo $i | sed 's/,//g')
+        done
     fi
-}
-
-reallyclean () {
-    rm -r $cleanfiles
-    rm -r $reallycleanfiles
 }
 
 if [ "$1" == "build" ]; then
