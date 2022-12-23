@@ -68,6 +68,7 @@ elif [ "$1" == "slowbuild" ]; then
         echo
         echo "Build failed."
     fi
+    cleanup
 else
     echo "Options:"
     echo
