@@ -20,12 +20,17 @@ prompt () {
     fi
 }
 
-clean () {
-    rm -r aclocal.m4 autom4te.cache config.h.in config.status Makefile.in stamp-h1 src/Makefile.in
+cleanup () {
+    if [ "$2" == "debug1" ]; then
+        rm -r aclocal.m4 autom4te.cache config.h.in config.status Makefile.in stamp-h1 src/Makefile.in
+    elif [ "$2" == "debug2" ]; then
+        :
+    else
+        rm -r aclocal.m4 autom4te.cache build-aux config.h config.h.in config.log config.status configure Makefile Makefile.in stamp-h1 src/Makefile.in
+    fi
 }
 
 reallyclean () {
-    rm -r aclocal.m4 autom4te.cache build-aux config.h config.h.in config.log config.status configure Makefile Makefile.in stamp-h1 src/Makefile.in
     rm -r $cleanfiles
     rm -r $reallycleanfiles
 }
@@ -35,7 +40,7 @@ if [ "$1" == "build" ]; then
     autoreconf -i
     ./configure
     make
-    reallyclean
+    cleanup
 elif [ "$1" == "clean" ]; then
     git clean -dfx
 elif [ "$1" == "slowbuild" ]; then
