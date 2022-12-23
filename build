@@ -1,0 +1,37 @@
+#!/bin/sh
+
+prompt () {
+    if [ $? == 0 ]; then
+        echo
+        echo "Stage success. Proceed to $2 stage? y/n"
+        read $3
+        if [ $3 == "n"]; then
+            echo "Aborting."
+            exit
+        fi
+    else
+        echo
+        echo "Stage failure. Aborting."
+        exit
+    fi
+}
+
+if [ "$1" == "build" ]; then
+    ./buildtool clean
+    autoreconf -i
+    ./configure
+    make
+elif [ "$1" == "clean" ]; then
+    git clean -dfx
+elif [ "$1" == "slowbuild" ]; then
+    ./buildtool clean
+    autoreconf -i
+    ./configure
+    make
+else
+    echo "Options:"
+    echo
+    echo "build - rebuild and compile the project"
+    echo "clean - remove all files untracked by git"
+    echo "slowbuild - ask for confirmation after each stage of building"
+fi
