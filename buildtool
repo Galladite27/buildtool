@@ -5,7 +5,7 @@ prompt () {
         echo
         echo "Stage success. Proceed to $1 stage? y/n"
         read $2
-        if [ $2 == "n" ]; then
+        if [ "$2" == "n" ]; then
             echo "Aborting."
             exit
         fi
