@@ -4,8 +4,9 @@ prompt () {
     if [ $? == 0 ]; then
         echo
         echo "Stage success. Proceed to $1 stage? y/n"
-        read $2
-        if [ "$2" == "n" ]; then
+        read a
+        if [ "$a" == "n" ]; then
+            echo
             echo "Aborting."
             exit
         fi
