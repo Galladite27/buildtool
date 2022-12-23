@@ -25,9 +25,19 @@ elif [ "$1" == "clean" ]; then
     git clean -dfx
 elif [ "$1" == "slowbuild" ]; then
     ./buildtool clean
+    prompt
     autoreconf -i
+    prompt
     ./configure
+    prompt
     make
+    if [ $? == 0 ]; then
+        echo
+        echo "Build successful."
+    else
+        echo
+        echo "Build failed."
+    fi
 else
     echo "Options:"
     echo
