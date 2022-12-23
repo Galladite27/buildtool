@@ -52,15 +52,19 @@ if [ "$1" == "build" ]; then
         else
             mkdir /tmp/buildtool
         fi
-        mv ./*.tar.gz /tmp/buildtool
-        ./buildtool clean
-        mv /tmp/buildtool/*.tar.gz ./
     fi
     ./buildtool clean
     autoreconf -i
     ./configure
-    make
-    cleanup $2
+    if [ "$2" == "dist" ]; then
+        make dist
+        mv ./*.tar.gz /tmp/buildtool
+        cleanup $2
+        mv /tmp/buildtool/*.tar.gz ./
+    else
+        make
+        cleanup $2
+    fi
 elif [ "$1" == "clean" ]; then
     git clean -dfx
 elif [ "$1" == "slowbuild" ]; then
@@ -86,7 +90,7 @@ else
     echo "build - rebuild and compile the project, leaving only the compiled binary"
     echo "build debug1 - rebuild and compile the project, leaving some intermediary files"
     echo "build debug2 - rebuild and compile the project, leaving all intermediary files"
-    echo "build dist"
+    echo "build dist - rebuild and compile the project, creating a tarball ready for distribution"
     echo "clean - remove all files untracked by git"
     echo "slowbuild - ask for confirmation after each stage of building"
 fi
