@@ -26,12 +26,12 @@ prompt () {
 }
 
 cleanup () {
-    if [ "$2" == "debug1" ]; then
+    if [ "$1" == "debug1" ]; then
         rm -r aclocal.m4 autom4te.cache config.h.in config.status Makefile.in stamp-h1 src/Makefile.in
         for i in "${reallycleanfiles[@]}"; do
             rm -r $(echo $i | sed 's/,//g')
         done
-    elif [ "$2" == "debug2" ]; then
+    elif [ "$1" == "debug2" ]; then
         :
     else
         rm -r aclocal.m4 autom4te.cache build-aux config.h config.h.in config.log config.status configure Makefile Makefile.in stamp-h1 src/Makefile.in
@@ -45,11 +45,22 @@ cleanup () {
 }
 
 if [ "$1" == "build" ]; then
+    if [ "$2" == "dist" ]; then
+        ./buildtool build debug2
+        if [ -e /tmp/buildtool ]; then
+            rm -rf /tmp/buildtool/*
+        else
+            mkdir /tmp/buildtool
+        fi
+        mv ./*.tar.gz /tmp/buildtool
+        ./buildtool clean
+        mv /tmp/buildtool/*.tar.gz ./
+    fi
     ./buildtool clean
     autoreconf -i
     ./configure
     make
-    cleanup
+    cleanup $2
 elif [ "$1" == "clean" ]; then
     git clean -dfx
 elif [ "$1" == "slowbuild" ]; then
@@ -68,13 +79,14 @@ elif [ "$1" == "slowbuild" ]; then
         echo
         echo "Build failed."
     fi
-    cleanup
+    cleanup $2
 else
     echo "Options:"
     echo
     echo "build - rebuild and compile the project, leaving only the compiled binary"
     echo "build debug1 - rebuild and compile the project, leaving some intermediary files"
     echo "build debug2 - rebuild and compile the project, leaving all intermediary files"
+    echo "build dist"
     echo "clean - remove all files untracked by git"
     echo "slowbuild - ask for confirmation after each stage of building"
 fi
