@@ -44,7 +44,9 @@ cleanup () {
         done
     fi
     mkdir ./build
-    mv ./src/$binname ./build/$binname
+    if [ -f ./src/$binname ]; then
+        mv ./src/$binname ./build/$binname
+    fi
 }
 
 if [ "$1" == "build" ]; then
@@ -58,7 +60,6 @@ if [ "$1" == "build" ]; then
         make dist
         mv ./*.tar.gz /tmp/buildtool
         cleanup $2
-        rm ./build/$binname
         mv /tmp/buildtool/*.tar.gz ./build/
     else
         ./buildtool clean
