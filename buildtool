@@ -28,22 +28,23 @@ prompt () {
 
 cleanup () {
     if [ "$1" == "debug1" ]; then
-        rm -r aclocal.m4 autom4te.cache config.h.in config.status Makefile.in stamp-h1 src/Makefile.in
+        rm -rf aclocal.m4 autom4te.cache config.h.in config.status Makefile.in stamp-h1 src/Makefile.in build
         for i in "${cleanfiles[@]}"; do
-            rm -r $(echo $i | sed 's/,//g')
+            rm -rf $(echo $i | sed 's/,//g')
         done
     elif [ "$1" == "debug2" ]; then
         :
     else
-        rm -r aclocal.m4 autom4te.cache build-aux config.h config.h.in config.log config.status configure Makefile Makefile.in stamp-h1 src/Makefile.in
+        rm -rf aclocal.m4 autom4te.cache build-aux config.h config.h.in config.log config.status configure Makefile Makefile.in stamp-h1 src/Makefile.in build
         for i in "${cleanfiles[@]}"; do
-            rm -r $(echo $i | sed 's/,//g')
+            rm -rf $(echo $i | sed 's/,//g')
         done
         for i in "${reallycleanfiles[@]}"; do
-            rm -r $(echo $i | sed 's/,//g')
+            rm -rf $(echo $i | sed 's/,//g')
         done
     fi
-    mv src/$binname build/
+    mkdir ./build
+    mv ./src/$binname ./build/$binname
 }
 
 if [ "$1" == "build" ]; then
