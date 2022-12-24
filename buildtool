@@ -9,6 +9,11 @@ reallycleanfiles=("src/Makefile", "src/.deps")
 # binname is the name of the file in src/ which should be moved to build/
 binname="main"
 
+# you may provide an absolute path for the root directory of the project to ensure that buildtool always begins in the correct place. Example:
+# rootdirectory="/home/bob/.local/src/myproject"
+rootdirectory="$(pwd)"
+cd "$rootdirectory"
+
 prompt () {
     if [ $? == 0 ]; then
         echo
