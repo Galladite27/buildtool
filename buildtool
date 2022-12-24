@@ -46,21 +46,16 @@ cleanup () {
     mkdir ./build
     if [ -f ./src/$binname ]; then
         mv ./src/$binname ./build/$binname
+    elif [ "$1" == "dist" ]; then
+        mv *.tar.gz ./build/
     fi
 }
 
 if [ "$1" == "build" ]; then
     if [ "$2" == "dist" ]; then
         ./buildtool build debug2
-        if [ -e /tmp/buildtool ]; then
-            rm -rf /tmp/buildtool/*
-        else
-            mkdir /tmp/buildtool
-        fi
         make dist
-        mv ./*.tar.gz /tmp/buildtool
         cleanup $2
-        mv /tmp/buildtool/*.tar.gz ./build/
     else
         ./buildtool clean
         autoreconf -i
