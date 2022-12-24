@@ -52,16 +52,14 @@ if [ "$1" == "build" ]; then
         else
             mkdir /tmp/buildtool
         fi
-    fi
-    ./buildtool clean
-    autoreconf -i
-    ./configure
-    if [ "$2" == "dist" ]; then
         make dist
         mv ./*.tar.gz /tmp/buildtool
         cleanup $2
         mv /tmp/buildtool/*.tar.gz ./
     else
+        ./buildtool clean
+        autoreconf -i
+        ./configure
         make
         cleanup $2
     fi
