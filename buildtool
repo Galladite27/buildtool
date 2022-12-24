@@ -28,7 +28,7 @@ prompt () {
 cleanup () {
     if [ "$1" == "debug1" ]; then
         rm -r aclocal.m4 autom4te.cache config.h.in config.status Makefile.in stamp-h1 src/Makefile.in
-        for i in "${reallycleanfiles[@]}"; do
+        for i in "${cleanfiles[@]}"; do
             rm -r $(echo $i | sed 's/,//g')
         done
     elif [ "$1" == "debug2" ]; then
