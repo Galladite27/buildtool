@@ -58,7 +58,8 @@ if [ "$1" == "build" ]; then
         make dist
         mv ./*.tar.gz /tmp/buildtool
         cleanup $2
-        mv /tmp/buildtool/*.tar.gz ./build
+        rm ./build/$binname
+        mv /tmp/buildtool/*.tar.gz ./build/
     else
         ./buildtool clean
         autoreconf -i
