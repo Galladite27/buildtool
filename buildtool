@@ -1,12 +1,13 @@
 #!/bin/sh
 
 # cleanfiles should be removed during a normal build and a level 1 debug build (i.e. will only be useful to deep debugging, e.g. *.o files)
-# don't add spaces or other funky stuff
 cleanfiles=("src/main.o")
 
 # reallycleanfiles should be removed during a normal build only (i.e. will be useful to all debugging, e.g. makefiles)
-# don't add spaces or other funky stuff
 reallycleanfiles=("src/Makefile", "src/.deps")
+
+# binname is the name of the file in src/ which should be moved to build/
+binname="main"
 
 prompt () {
     if [ $? == 0 ]; then
@@ -42,6 +43,7 @@ cleanup () {
             rm -r $(echo $i | sed 's/,//g')
         done
     fi
+    mv src/$binname build/
 }
 
 if [ "$1" == "build" ]; then
@@ -55,7 +57,7 @@ if [ "$1" == "build" ]; then
         make dist
         mv ./*.tar.gz /tmp/buildtool
         cleanup $2
-        mv /tmp/buildtool/*.tar.gz ./
+        mv /tmp/buildtool/*.tar.gz ./build
     else
         ./buildtool clean
         autoreconf -i
